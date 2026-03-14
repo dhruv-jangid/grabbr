@@ -11,7 +11,7 @@ function videoArgs(
   // Mandatory fields validation
   args.push('--ffmpeg-location', FFMPEG)
   args.push('--output', required.outTemplate)
-  args.push('--windows-filenames')
+  args.push('--restrict-filenames')
   args.push('--print', 'before_dl:%(title)s')
   args.push('--print', 'after_move:filepath')
   args.push('--js-runtimes', 'node')
