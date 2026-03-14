@@ -127,7 +127,7 @@ declare global {
       }
       output?: string
       outputNaPlaceholder?: string
-      restrictFilenames?: boolean
+      restrictFilenames: boolean
       noRestrictFilenames?: boolean
       windowsFilenames?: boolean
       noWindowsFilenames?: boolean
@@ -318,7 +318,7 @@ declare global {
       noKeepVideo?: boolean
       postOverwrites: boolean
       noPostOverwrites?: boolean
-      embedThumbnail?: boolean
+      embedThumbnail: boolean
       noEmbedThumbnail?: boolean
       embedMetadata: boolean
       noEmbedMetadata?: boolean
@@ -421,7 +421,7 @@ declare global {
       noPostOverwrites?: boolean
       embedSubs?: boolean
       noEmbedSubs?: boolean
-      embedThumbnail?: boolean
+      embedThumbnail: boolean
       noEmbedThumbnail?: boolean
       embedMetadata: boolean
       noEmbedMetadata?: boolean

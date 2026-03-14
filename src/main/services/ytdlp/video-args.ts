@@ -1,3 +1,4 @@
+import { THUMB_EMBED_VIDEO_FMTS } from '../../../shared/constants'
 import { FFMPEG } from '../binary-paths'
 
 function videoArgs(
@@ -11,7 +12,6 @@ function videoArgs(
   // Mandatory fields validation
   args.push('--ffmpeg-location', FFMPEG)
   args.push('--output', required.outTemplate)
-  args.push('--restrict-filenames')
   args.push('--print', 'before_dl:%(title)s')
   args.push('--print', 'after_move:filepath')
   args.push('--js-runtimes', 'node')
@@ -167,6 +167,7 @@ function videoArgs(
 
   // FILESYSTEM OPTIONS
   const f = custom.filesystem
+  args.push('--restrict-filenames')
   if (f.batchFile) args.push('--batch-file', f.batchFile)
   if (f.noBatchFile) args.push('--no-batch-file')
   if (f.paths) {
@@ -183,7 +184,6 @@ function videoArgs(
     if (f.paths.pl_infojson) args.push('--paths', `pl_infojson:${f.paths.pl_infojson}`)
   }
   if (f.outputNaPlaceholder) args.push('--output-na-placeholder', f.outputNaPlaceholder)
-  if (f.restrictFilenames) args.push('--restrict-filenames')
   if (f.noRestrictFilenames) args.push('--no-restrict-filenames')
   if (f.windowsFilenames) args.push('--windows-filenames')
   if (f.noWindowsFilenames) args.push('--no-windows-filenames')
@@ -342,7 +342,8 @@ function videoArgs(
 
   // VIDEO FORMAT OPTIONS
   const vf = custom.videoFormat
-  if (vf.format) args.push('--format', vf.format)
+  args.push('--format', vf.format)
+  args.push('--merge-output-format', vf.mergeOutputFormat)
   if (vf.formatSort) args.push('--format-sort', vf.formatSort)
   if (vf.formatSortForce) args.push('--format-sort-force')
   if (vf.noFormatSortForce) args.push('--no-format-sort-force')
@@ -356,13 +357,10 @@ function videoArgs(
   if (vf.checkAllFormats) args.push('--check-all-formats')
   if (vf.noCheckFormats) args.push('--no-check-formats')
   if (vf.listFormats) args.push('--list-formats')
-  if (vf.mergeOutputFormat) {
-    args.push('--merge-output-format', vf.mergeOutputFormat)
 
-    // RE-ENCODING for MOV as appropriate codecs are required
-    if (vf.mergeOutputFormat === 'mov') {
-      args.push('--postprocessor-args', 'ffmpeg:-c:v libx264 -c:a aac -movflags +faststart')
-    }
+  // RE-ENCODING for MOV as appropriate codecs are required
+  if (vf.mergeOutputFormat === 'mov') {
+    args.push('--postprocessor-args', 'ffmpeg:-c:v libx264 -c:a aac -movflags +faststart')
   }
 
   // SUBTITLE OPTIONS
@@ -379,6 +377,9 @@ function videoArgs(
 
   // POST-PROCESSING OPTIONS
   const pp = custom.postProcessing
+  if (THUMB_EMBED_VIDEO_FMTS.includes(vf.mergeOutputFormat)) {
+    if (pp.embedThumbnail) args.push('--embed-thumbnail')
+  }
   if (pp.remuxVideo) args.push('--remux-video', pp.remuxVideo)
   if (pp.recodeVideo) args.push('--recode-video', pp.recodeVideo)
   if (pp.postprocessorArgs) args.push('--postprocessor-args', pp.postprocessorArgs)

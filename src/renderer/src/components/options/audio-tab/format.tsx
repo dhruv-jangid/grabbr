@@ -8,7 +8,7 @@ const formats = [
     name: 'FLAC',
     content: (
       <>
-        <p className="underline underline-offset-4 decoration-muted-foreground mb-1">
+        <p className="underline underline-offset-4 decoration-muted-foreground mb-1 font-medium">
           Free Lossless Audio Codec
         </p>
         <p>Size: Medium</p>
@@ -22,7 +22,7 @@ const formats = [
     name: 'ALAC',
     content: (
       <>
-        <p className="underline underline-offset-4 decoration-muted-foreground mb-1">
+        <p className="underline underline-offset-4 decoration-muted-foreground mb-1 font-medium">
           Apple Lossless Audio Codec
         </p>
         <p>Size: Medium</p>
@@ -36,7 +36,7 @@ const formats = [
     name: 'WAV',
     content: (
       <>
-        <p className="underline underline-offset-4 decoration-muted-foreground mb-1">
+        <p className="underline underline-offset-4 decoration-muted-foreground mb-1 font-medium">
           Waveform Audio File Format
         </p>
         <p>Size: Very Large</p>
@@ -50,7 +50,9 @@ const formats = [
     name: 'OPUS',
     content: (
       <>
-        <p className="underline underline-offset-4 decoration-muted-foreground mb-1">OPUS</p>
+        <p className="underline underline-offset-4 decoration-muted-foreground mb-1 font-medium">
+          OPUS
+        </p>
         <p>Size: Very Small</p>
         <p>Quality: Very High</p>
         <p>Compatibility: Good</p>
@@ -62,7 +64,7 @@ const formats = [
     name: 'M4A',
     content: (
       <>
-        <p className="underline underline-offset-4 decoration-muted-foreground mb-1">
+        <p className="underline underline-offset-4 decoration-muted-foreground mb-1 font-medium">
           MPEG-4 Audio
         </p>
         <p>Size: Small</p>
@@ -76,7 +78,7 @@ const formats = [
     name: 'MP3',
     content: (
       <>
-        <p className="underline underline-offset-4 decoration-muted-foreground mb-1">
+        <p className="underline underline-offset-4 decoration-muted-foreground mb-1 font-medium">
           MPEG Audio Layer III
         </p>
         <p>Size: Small</p>
@@ -90,7 +92,9 @@ const formats = [
     name: 'VORBIS',
     content: (
       <>
-        <p className="underline underline-offset-4 decoration-muted-foreground mb-1">Ogg Vorbis</p>
+        <p className="underline underline-offset-4 decoration-muted-foreground mb-1 font-medium">
+          Ogg Vorbis
+        </p>
         <p>Size: Small</p>
         <p>Quality: High</p>
         <p>Compatibility: Good</p>
@@ -107,7 +111,7 @@ function Format(): React.JSX.Element {
 
   return (
     <div className="space-y-1">
-      <div className={`${isBest && 'opacity-50'}`}>Format</div>
+      <div className={`${isBest && 'opacity-50'} font-medium`}>Format</div>
       <ToggleGroup
         disabled={isBest}
         value={[audio.custom.postProcessing.audioFormat]}
@@ -119,11 +123,7 @@ function Format(): React.JSX.Element {
           return (
             <Tooltip key={format.value}>
               <TooltipTrigger
-                render={
-                  <ToggleGroupItem value={format.value} aria-label={`Toggle ${format.value}`}>
-                    {format.name}
-                  </ToggleGroupItem>
-                }
+                render={<ToggleGroupItem value={format.value}>{format.name}</ToggleGroupItem>}
               />
               <TooltipContent>{format.content}</TooltipContent>
             </Tooltip>

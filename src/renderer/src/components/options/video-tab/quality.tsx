@@ -2,66 +2,56 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '../../ui/tooltip'
 import { ToggleGroup, ToggleGroupItem } from '../../ui/toggle-group'
 import { usePreferences } from '@renderer/components/providers/preferences'
 
-const qualities = [
+const QUALITIES = [
   {
     value: 'bv+ba/best',
-    ariaLabel: 'Toggle Best',
-    name: 'Best',
-    content: <p>Best available</p>
+    name: 'Peak',
+    content: 'Peak available'
   },
   {
     value: 'bv[height<=4320]+ba/best',
-    ariaLabel: 'Toggle 8k',
     name: '4320p',
-    content: <p>UHD (8K)</p>
+    content: 'UHD (8K)'
   },
   {
     value: 'bv[height<=2160]+ba/best',
-    ariaLabel: 'Toggle 4k',
     name: '2160p',
-    content: <p>UHD (4K)</p>
+    content: 'UHD (4K)'
   },
   {
     value: 'bv[height<=1440]+ba/best',
-    ariaLabel: 'Toggle 2k',
     name: '1440p',
-    content: <p>QHD</p>
+    content: 'QHD'
   },
   {
     value: 'bv[height<=1080]+ba/best',
-    ariaLabel: 'Toggle 1080p',
     name: '1080p',
-    content: <p>FHD</p>
+    content: 'FHD'
   },
   {
     value: 'bv[height<=720]+ba/best',
-    ariaLabel: 'Toggle 720p',
     name: '720p',
-    content: <p>HD</p>
+    content: 'HD'
   },
   {
     value: 'bv[height<=480]+ba/best',
-    ariaLabel: 'Toggle 480p',
     name: '480p',
-    content: <p>SD</p>
+    content: 'SD'
   },
   {
     value: 'bv[height<=360]+ba/best',
-    ariaLabel: 'Toggle 360p',
     name: '360p',
-    content: <p>SD</p>
+    content: 'SD'
   },
   {
     value: 'bv[height<=240]+ba/best',
-    ariaLabel: 'Toggle 240p',
     name: '240p',
-    content: <p>Low</p>
+    content: 'Low'
   },
   {
     value: 'bv[height<=144]+ba/best',
-    ariaLabel: 'Toggle 144p',
     name: '144p',
-    content: <p>Very Low</p>
+    content: 'Very Low'
   }
 ]
 
@@ -73,7 +63,7 @@ function Quality(): React.JSX.Element {
 
   return (
     <div className="space-y-1">
-      <div className={`${isBest && 'opacity-50'}`}>Quality</div>
+      <div className={`${isBest && 'opacity-50'} font-medium`}>Quality</div>
       <ToggleGroup
         disabled={isBest}
         value={[video.custom.videoFormat.format]}
@@ -81,15 +71,11 @@ function Quality(): React.JSX.Element {
           updatePreference('video.custom.videoFormat.format', value[0])
         }}
       >
-        {qualities.map(function (quality) {
+        {QUALITIES.map(function (quality) {
           return (
             <Tooltip key={quality.value}>
               <TooltipTrigger
-                render={
-                  <ToggleGroupItem value={quality.value} aria-label={quality.ariaLabel}>
-                    {quality.name}
-                  </ToggleGroupItem>
-                }
+                render={<ToggleGroupItem value={quality.value}>{quality.name}</ToggleGroupItem>}
               />
               <TooltipContent>{quality.content}</TooltipContent>
             </Tooltip>

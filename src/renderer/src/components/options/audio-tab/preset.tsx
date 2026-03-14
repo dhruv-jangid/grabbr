@@ -10,7 +10,7 @@ function Preset(): React.JSX.Element {
 
   return (
     <div className="space-y-1">
-      <div>Preset</div>
+      <div className="font-medium">Preset</div>
       <ToggleGroup
         value={[audio.preset]}
         onValueChange={function (value) {
@@ -20,27 +20,17 @@ function Preset(): React.JSX.Element {
         <Tooltip>
           <TooltipTrigger
             render={
-              <ToggleGroupItem value="best" aria-label="Toggle best preset">
+              <ToggleGroupItem value="best">
                 <HugeiconsIcon icon={AiMagicIcon} />
                 Best
               </ToggleGroupItem>
             }
           />
-          <TooltipContent>
-            <p>Peak available quality (in MP3)</p>
-          </TooltipContent>
+          <TooltipContent>Source quality (in MP3)</TooltipContent>
         </Tooltip>
         <Tooltip>
-          <TooltipTrigger
-            render={
-              <ToggleGroupItem value="custom" aria-label="Toggle custom preset">
-                Custom
-              </ToggleGroupItem>
-            }
-          />
-          <TooltipContent>
-            <p>Full control over each setting</p>
-          </TooltipContent>
+          <TooltipTrigger render={<ToggleGroupItem value="custom">Custom</ToggleGroupItem>} />
+          <TooltipContent>Full control over each setting</TooltipContent>
         </Tooltip>
       </ToggleGroup>
     </div>

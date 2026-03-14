@@ -13,13 +13,17 @@ const store = new Store<Preferences>({
           extractAudio: true,
           audioFormat: 'wav',
           audioQuality: '0',
-          // embedThumbnail: true,
+          embedThumbnail: true,
           embedMetadata: true,
           embedChapters: true,
           postOverwrites: true
         },
         videoSelection: { noPlaylist: true },
-        filesystem: { noOverwrites: true, noPart: true }
+        filesystem: {
+          noOverwrites: true,
+          noPart: true,
+          restrictFilenames: true
+        }
       }
     },
     video: {
@@ -30,13 +34,17 @@ const store = new Store<Preferences>({
           mergeOutputFormat: 'mp4'
         },
         postProcessing: {
-          // embedThumbnail: true,
+          embedThumbnail: true,
           embedMetadata: true,
           embedChapters: true,
           postOverwrites: true
         },
         videoSelection: { noPlaylist: true },
-        filesystem: { noOverwrites: true, noPart: true }
+        filesystem: {
+          noOverwrites: true,
+          noPart: true,
+          restrictFilenames: true
+        }
       }
     }
   }

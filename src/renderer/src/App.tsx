@@ -1,6 +1,5 @@
 import { toast } from 'sonner'
 import { Download } from '@hugeicons/core-free-icons'
-import { isValidUrl } from '@renderer/lib/utils'
 import { useState } from 'react'
 import { Options } from '@renderer/components/options'
 import { Button } from '@renderer/components/ui/button'
@@ -9,6 +8,7 @@ import { usePreferences } from '@renderer/components/providers/preferences'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { Type } from './components/type'
 import { useIpc } from './components/use-ipc'
+import { isValidUrl } from '../../shared/utils'
 
 function App(): React.JSX.Element {
   const [url, setUrl] = useState('')

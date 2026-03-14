@@ -1,3 +1,4 @@
+import { QLTY_CHNG_AUDIO_FMTS, THUMB_EMBED_AUDIO_FMTS } from '../../../shared/constants'
 import { FFMPEG } from '../binary-paths'
 
 function audioArgs(
@@ -11,10 +12,10 @@ function audioArgs(
   // Mandatory fields validation
   args.push('--ffmpeg-location', FFMPEG)
   args.push('--output', required.outTemplate)
-  args.push('--restrict-filenames')
   args.push('--print', 'before_dl:%(title)s')
   args.push('--print', 'after_move:filepath')
   args.push('--js-runtimes', 'node')
+  args.push('--extract-audio')
 
   if (required.cookiesFilePath) args.push('--cookies', required.cookiesFilePath)
 
@@ -23,7 +24,6 @@ function audioArgs(
     args.push(
       '-f',
       'bestaudio/best',
-      '--extract-audio',
       '--audio-quality',
       '0',
       '--audio-format',
@@ -157,9 +157,9 @@ function audioArgs(
 
   // FILESYSTEM OPTIONS
   const fs = custom.filesystem
+  args.push('--restrict-filenames')
   if (fs.batchFile) args.push('--batch-file', fs.batchFile)
   if (fs.noBatchFile) args.push('--no-batch-file')
-  if (fs.restrictFilenames) args.push('--restrict-filenames')
   if (fs.noRestrictFilenames) args.push('--no-restrict-filenames')
   if (fs.windowsFilenames) args.push('--windows-filenames')
   if (fs.noWindowsFilenames) args.push('--no-windows-filenames')
@@ -193,15 +193,19 @@ function audioArgs(
 
   // AUDIO POST-PROCESSING
   const pp = custom.postProcessing
-  if (pp.extractAudio) args.push('--extract-audio')
-  if (pp.audioFormat) args.push('--audio-format', pp.audioFormat)
-  if (pp.audioQuality) args.push('--audio-quality', pp.audioQuality)
+  args.push('--audio-format', pp.audioFormat)
+  args.push(
+    '--audio-quality',
+    QLTY_CHNG_AUDIO_FMTS.includes(pp.audioFormat) ? pp.audioQuality : '0'
+  )
+  if (THUMB_EMBED_AUDIO_FMTS.includes(pp.audioFormat)) {
+    if (pp.embedThumbnail) args.push('--embed-thumbnail')
+  }
   if (pp.postprocessorArgs) args.push('--postprocessor-args', pp.postprocessorArgs)
   if (pp.keepVideo) args.push('--keep-video')
   if (pp.noKeepVideo) args.push('--no-keep-video')
   if (pp.postOverwrites) args.push('--post-overwrites')
   if (pp.noPostOverwrites) args.push('--no-post-overwrites')
-  if (pp.embedThumbnail) args.push('--embed-thumbnail')
   if (pp.noEmbedThumbnail) args.push('--no-embed-thumbnail')
   if (pp.embedMetadata) args.push('--embed-metadata')
   if (pp.noEmbedMetadata) args.push('--no-embed-metadata')

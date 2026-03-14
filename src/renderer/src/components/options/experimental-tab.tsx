@@ -82,7 +82,7 @@ function ExperimentalTab(): React.JSX.Element {
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <span className="ml-0.5">Cookies Directory</span>
+          <span className="font-medium">Cookies Directory</span>
           <div className="flex items-center gap-2">
             <Button
               size="sm"

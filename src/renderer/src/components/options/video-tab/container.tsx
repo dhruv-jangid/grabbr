@@ -2,13 +2,13 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '../../ui/tooltip'
 import { ToggleGroup, ToggleGroupItem } from '../../ui/toggle-group'
 import { usePreferences } from '@renderer/components/providers/preferences'
 
-const containers = [
+const CONTAINERS = [
   {
     value: 'mp4',
     name: 'MP4',
     content: (
       <>
-        <p className="underline underline-offset-4 decoration-muted-foreground mb-1">
+        <p className="underline underline-offset-4 decoration-muted-foreground mb-1 font-medium">
           MPEG-4 Part 14
         </p>
         <p>Compatibility: Universal</p>
@@ -21,7 +21,7 @@ const containers = [
     name: 'MKV',
     content: (
       <>
-        <p className="underline underline-offset-4 decoration-muted-foreground mb-1">
+        <p className="underline underline-offset-4 decoration-muted-foreground mb-1 font-medium">
           Matroska Video
         </p>
         <p>Compatibility: Moderate</p>
@@ -52,7 +52,7 @@ function Container(): React.JSX.Element {
 
   return (
     <div className="space-y-1">
-      <div className={`${isBest && 'opacity-50'}`}>Container</div>
+      <div className={`${isBest && 'opacity-50'} font-medium`}>Container</div>
       <ToggleGroup
         disabled={isBest}
         value={[video.custom.videoFormat.mergeOutputFormat]}
@@ -60,15 +60,11 @@ function Container(): React.JSX.Element {
           updatePreference('video.custom.videoFormat.mergeOutputFormat', value[0] as any)
         }}
       >
-        {containers.map(function (container) {
+        {CONTAINERS.map(function (container) {
           return (
             <Tooltip key={container.value}>
               <TooltipTrigger
-                render={
-                  <ToggleGroupItem value={container.value} aria-label={`Toggle ${container.value}`}>
-                    {container.name}
-                  </ToggleGroupItem>
-                }
+                render={<ToggleGroupItem value={container.value}>{container.name}</ToggleGroupItem>}
               />
               <TooltipContent>{container.content}</TooltipContent>
             </Tooltip>

@@ -22,13 +22,17 @@ function PreferencesProvider({ children }: { children: React.ReactNode }): React
           extractAudio: true,
           audioFormat: 'best',
           audioQuality: '0',
-          // embedThumbnail: true,
+          embedThumbnail: true,
           embedChapters: true,
           embedMetadata: true,
           postOverwrites: true
         },
         videoSelection: { noPlaylist: true },
-        filesystem: { noOverwrites: true, noPart: true }
+        filesystem: {
+          noOverwrites: true,
+          noPart: true,
+          restrictFilenames: true
+        }
       }
     },
     video: {
@@ -39,13 +43,17 @@ function PreferencesProvider({ children }: { children: React.ReactNode }): React
           mergeOutputFormat: 'mp4'
         },
         postProcessing: {
-          // embedThumbnail: true,
+          embedThumbnail: true,
           embedChapters: true,
           embedMetadata: true,
           postOverwrites: true
         },
         videoSelection: { noPlaylist: true },
-        filesystem: { noOverwrites: true, noPart: true }
+        filesystem: {
+          noOverwrites: true,
+          noPart: true,
+          restrictFilenames: true
+        }
       }
     }
   })

@@ -57,7 +57,7 @@ function UpdatesTab(): React.JSX.Element {
     <Card className="h-full">
       <CardContent className="space-y-6">
         <div className="space-y-1">
-          <div className="ml-0.5 text-base">yt-dlp</div>
+          <div className="text-base font-medium">yt-dlp</div>
           <ul className="list-disc ml-6">
             <li>Sources: YouTube, Instagram</li>
             <li>Version: {ytdlpVersion}</li>

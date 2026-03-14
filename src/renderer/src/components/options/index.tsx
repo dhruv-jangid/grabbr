@@ -22,7 +22,7 @@ function Options(): React.JSX.Element {
           </Button>
         }
       />
-      <DialogContent className="min-w-2xl min-h-120">
+      <DialogContent className="min-w-2xl min-h-136">
         <Tabs defaultValue={preferences.type}>
           <TabsList>
             <TabsTrigger value="audio">Audio</TabsTrigger>

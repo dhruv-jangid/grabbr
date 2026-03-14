@@ -38,26 +38,26 @@ function GeneralTab(): React.JSX.Element {
     <Card className="h-full">
       <CardContent className="space-y-6">
         <div className="space-y-1">
-          <div className="ml-0.5">Theme</div>
+          <div className="font-medium">Theme</div>
           <ToggleGroup
             value={[theme!]}
             onValueChange={function (value) {
               setTheme(value[0])
             }}
           >
-            <ToggleGroupItem value="system" aria-label="Toggle system">
+            <ToggleGroupItem value="system">
               <HugeiconsIcon icon={ComputerIcon} className="mr-0.5 size-3.5" /> System
             </ToggleGroupItem>
-            <ToggleGroupItem value="light" aria-label="Toggle light">
+            <ToggleGroupItem value="light">
               <HugeiconsIcon icon={Sun03Icon} /> Light
             </ToggleGroupItem>
-            <ToggleGroupItem value="dark" aria-label="Toggle dark">
+            <ToggleGroupItem value="dark">
               <HugeiconsIcon icon={Moon02Icon} className="size-3.5" /> Dark
             </ToggleGroupItem>
           </ToggleGroup>
         </div>
         <div className="space-y-1">
-          <div className="ml-0.5">Download Directory</div>
+          <div className="font-medium">Download Directory</div>
           <div className="flex items-center gap-2">
             <ToggleGroup
               value={[downloadMode]}
@@ -65,14 +65,14 @@ function GeneralTab(): React.JSX.Element {
                 updatePreference('downloadMode', value[0] as any)
               }}
             >
-              <ToggleGroupItem value="ask" aria-label="Toggle ask">
+              <ToggleGroupItem value="ask">
                 <HugeiconsIcon icon={HelpCircleIcon} /> Ask Each Time
               </ToggleGroupItem>
               {downloadDirectory ? (
                 <Tooltip>
                   <TooltipTrigger
                     render={
-                      <ToggleGroupItem value="select" aria-label="Toggle select">
+                      <ToggleGroupItem value="select">
                         <HugeiconsIcon icon={Folder01Icon} className="mr-0.5" />
                         {downloadDirectory.length > 15
                           ? `${downloadDirectory.slice(0, 15)}...`
@@ -85,11 +85,7 @@ function GeneralTab(): React.JSX.Element {
                   </TooltipContent>
                 </Tooltip>
               ) : (
-                <ToggleGroupItem
-                  value="select"
-                  aria-label="Toggle select"
-                  onClick={selectDownloadDirectory}
-                >
+                <ToggleGroupItem value="select" onClick={selectDownloadDirectory}>
                   <HugeiconsIcon icon={Folder01Icon} />
                   Select
                 </ToggleGroupItem>

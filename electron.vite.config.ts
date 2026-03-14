@@ -39,7 +39,6 @@ export default defineConfig(function ({ command }) {
           mangle: { toplevel: onBuild },
           format: { comments: false }
         },
-        watch: {},
         rollupOptions: { output: { format: 'es' } }
       }
     },
@@ -75,7 +74,6 @@ export default defineConfig(function ({ command }) {
           mangle: { toplevel: onBuild },
           format: { comments: false }
         },
-        watch: {},
         rollupOptions: { output: { format: 'es' } }
       }
     },
@@ -106,8 +104,7 @@ export default defineConfig(function ({ command }) {
             properties: true,
             computed_props: true,
             if_return: true,
-            switches: true,
-            global_defs: onBuild ? { 'is.dev': false } : {}
+            switches: true
           },
           mangle: { toplevel: onBuild },
           format: { comments: false }

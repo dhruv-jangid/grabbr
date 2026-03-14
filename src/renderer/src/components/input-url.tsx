@@ -6,9 +6,9 @@ import {
 } from './ui/context-menu'
 import { toast } from 'sonner'
 import { Input } from './ui/input'
-import { isValidUrl } from '@renderer/lib/utils'
 import { ClipboardPaste } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
+import { isValidUrl } from '../../../shared/utils'
 
 function InputUrl({
   url,
@@ -38,7 +38,7 @@ function InputUrl({
         <Input
           id="url"
           placeholder="Enter or Paste YouTube/Instagram URL"
-          className="font-mono"
+          className="font-mono font-medium"
           value={url}
           onChange={function (e) {
             setUrl(e.target.value)

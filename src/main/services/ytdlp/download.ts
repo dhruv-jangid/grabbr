@@ -1,12 +1,12 @@
 import { spawn } from 'child_process'
 import fs from 'fs'
 import { join } from 'path'
-import { isValidUrl } from '../../lib/utils'
 import { store } from '../../store'
 import { audioArgs } from './audio-args'
 import { videoArgs } from './video-args'
 import { YT_DLP } from '../binary-paths'
 import { activeDownloadProcesses, cancelledDownloads } from '../procs'
+import { isValidUrl } from '../../../shared/utils'
 
 function download(url: string, directoryPath: string, callbacks: DownloadCallbacksType): void {
   const id = crypto.randomUUID()
