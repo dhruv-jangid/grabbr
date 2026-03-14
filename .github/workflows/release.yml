@@ -1,105 +1,87 @@
-name: Build & Release NextDL
+name: Build/Release Grabbr
 
 on:
   push:
     tags:
-      - "v*"
+      - v*.*.*
 
 jobs:
-  build:
-    name: Build for ${{ matrix.os }}
+  release:
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 60
+
     strategy:
-      fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest, macos-latest, windows-latest]
+
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+      - name: Check out Git repository
+        uses: actions/checkout@v6
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Install Node.js
+        uses: actions/setup-node@v6
         with:
-          node-version: 22
+          node-version: 24
 
-      - name: Setup Bun
+      - name: Install Bun
         uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
 
-      - name: Setup FFmpeg (macOS)
-        if: runner.os == 'macOS'
-        run: brew install ffmpeg
+      - name: Download Binaries
+        run: bun run down
 
-      - name: Setup FFmpeg (Linux)
-        if: runner.os == 'Linux'
-        uses: FedericoCarboni/setup-ffmpeg@v3
-
-      - name: Setup FFmpeg (Windows)
-        if: runner.os == 'Windows'
-        uses: FedericoCarboni/setup-ffmpeg@v3
-
-      - name: Setup yt-dlp
-        uses: AnimMouse/setup-yt-dlp@v3
-        with:
-          ffmpeg: false
-
-      - name: Verify ffmpeg, ffprobe, yt-dlp (Unix)
-        if: runner.os != 'Windows'
+      - name: Verify binaries (Unix)
+        if: matrix.os != 'windows-latest'
         run: |
-          which ffmpeg
-          which ffprobe
-          which yt-dlp
-          ffmpeg -version
-          ffprobe -version
-          yt-dlp --version
+          resources/bin/ffmpeg -version
+          resources/bin/ffprobe -version
+          resources/bin/yt-dlp --version
 
-      - name: Verify ffmpeg, ffprobe, yt-dlp (Windows)
-        if: runner.os == 'Windows'
+      - name: Verify binaries (Windows)
+        if: matrix.os == 'windows-latest'
         shell: pwsh
         run: |
-          Get-Command ffmpeg
-          Get-Command ffprobe
-          Get-Command yt-dlp
-          ffmpeg -version
-          ffprobe -version
-          yt-dlp --version
+          resources\bin\ffmpeg.exe -version
+          resources\bin\ffprobe.exe -version
+          resources\bin\yt-dlp.exe --version
 
-      - name: Install dependencies (Bun)
-        run: bun install --no-progress
-        shell: bash
+      - name: Install Dependencies
+        run: bun install
 
-      - name: Stage binaries (Linux/macOS)
-        if: runner.os != 'Windows'
+      - name: build-linux
+        if: matrix.os == 'ubuntu-latest'
         run: |
-          mkdir -p apps/desktop/src/binaries
-          cp "$(command -v ffmpeg)"  apps/desktop/src/binaries/ffmpeg
-          cp "$(command -v ffprobe)" apps/desktop/src/binaries/ffprobe
-          cp "$(command -v yt-dlp)"  apps/desktop/src/binaries/yt-dlp
-          chmod +x apps/desktop/src/binaries/*
-
-      - name: Stage binaries (Windows)
-        if: runner.os == 'Windows'
-        shell: pwsh
-        run: |
-          New-Item -ItemType Directory -Force -Path apps/desktop/src/binaries | Out-Null
-          Copy-Item (Get-Command ffmpeg).Source  apps/desktop/src/binaries/ffmpeg.exe  -Force
-          Copy-Item (Get-Command ffprobe).Source apps/desktop/src/binaries/ffprobe.exe -Force
-          Copy-Item (Get-Command yt-dlp).Source  apps/desktop/src/binaries/yt-dlp.exe  -Force
-
-      - name: List staged binaries (Unix)
-        if: runner.os != 'Windows'
-        run: ls -lah apps/desktop/src/binaries
-
-      - name: List staged binaries (Windows)
-        if: runner.os == 'Windows'
-        shell: pwsh
-        run: Get-ChildItem -Path apps/desktop/src/binaries -Force
-
-      - name: Build and Publish
+          # sudo snap install snapcraft --classic
+          bun run build:linux
         env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
-        run: bun run publish
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: build-mac
+        if: matrix.os == 'macos-latest'
+        run: bun run build:mac
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: build-win
+        if: matrix.os == 'windows-latest'
+        run: bun run build:win
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: release
+        uses: softprops/action-gh-release@v2
+        with:
+          draft: true
+          files: |
+            dist/*.exe
+            dist/*.zip
+            dist/*.dmg
+            dist/*.AppImage
+            dist/*.snap
+            dist/*.deb
+            dist/*.rpm
+            dist/*.tar.gz
+            dist/*.yml
+            dist/*.blockmap
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,135 +1,150 @@
-# NextDL
+# Grabbr
 
-NextDL is a modern content downloader for YouTube and Instagram built with Next.js and Electron. It features a responsive web interface and cross-platform desktop application with advanced customization options.
+Grabbr is a desktop multimedia downloader built with Electron, React, and TypeScript. It is focused on a fast local workflow for downloading audio or video from supported URLs with `yt-dlp`, bundled media tools, saved preferences, and platform-specific desktop builds.
 
-## Key Features
+## Features
 
-### Platform Support
+- Desktop-first downloader for YouTube and Instagram links
+- Audio and video download modes with persistent preferences
+- Audio presets plus custom output controls for FLAC, ALAC, WAV, OPUS, M4A, MP3, and VORBIS
+- Video presets plus custom quality selection from 144p up to 4320p and MP4 or MKV output
+- Optional metadata and chapter embedding
+- Download location modes for asking every time or using a saved folder
+- Native folder and file pickers, cancelable downloads, and "Show in Folder" actions
+- In-app `yt-dlp` version checking and updating
+- Packaged app auto-update support through `electron-updater`
+- Experimental `cookies.txt` support for rate-limited downloads, with cleanup after use
 
-- Download from **YouTube** videos, shorts, and playlists
-- Download from **Instagram** posts, reels, and TV content
-- Cross-platform support for Windows, macOS, and Linux
+## Tech Stack
 
-### Web Application
-
-- Modern Next.js 15 interface with shadcn/ui components
-- Responsive design for all devices
-- Real-time conversion status and progress tracking
-- **Tabbed Settings Interface**: Organized General, Video, Audio, and Advanced tabs
-- **Comprehensive Format Options**: 8+ audio formats (FLAC, ALAC, WAV, OPUS, AAC, M4A, MP3, VORBIS)
-- **Advanced Video Quality**: Resolution options from 144p to 4320p (8K) with container format selection
-- **Advanced Features**: Cookies support for rate limit bypass (Beta)
-- **Enhanced UI Components**: Card-based layout with tooltips and radio toggle groups
-- Light/dark mode theme toggle with system preference detection
-- Persistent user preferences with download directory management
-- Toast notifications for user feedback
-
-### Desktop Application
-
-- Offline operation without internet dependency
-- Automatic updates with seamless experience
-- Bundled yt-dlp and FFmpeg binaries
-- Custom download location management
-- Native system integration and notifications
-
-### Media Format Support
-
-- **Audio Formats**: MP3, AAC, M4A, FLAC, ALAC, WAV, OPUS, VORBIS with detailed tooltips
-- **Video Formats**: Resolution options from 144p to 4320p (8K) with quality presets
-- **Container Formats**: MP4, WEBM, MKV with compatibility information
-- **Audio Quality**: Bitrate options from 64k to 320k for MP3, best quality for lossless formats
-- **Smart Presets**: "Best" preset for peak quality or "Custom" for full control
-- **Advanced Features**: Cookies support for bypassing rate limits (Beta)
-- **Subtitle Support**: Multiple language options and embedding
-
-### Technical Architecture
-
-- Full TypeScript implementation for type safety
-- Monorepo architecture with Turborepo
-- Modern UI with TailwindCSS 4 and shadcn/ui components
-- Persistent storage with Electron Store
-- Real-time progress tracking with ETA and speed indicators
-- Automated releases via GitHub Actions CI/CD pipeline
+- Electron 41
+- React 19
+- TypeScript 5
+- electron-vite
+- Tailwind CSS 4
+- Bun
+- electron-builder
+- electron-store
 
 ## Project Structure
 
-```bash
-nextdl/
-├── apps/
-│   ├── web/         # Next.js web application
-│   └── desktop/     # Electron desktop application
-├── packages/
-│   ├── scripts/     # Build and utility scripts
-│   └── types/       # Shared TypeScript types
-└── turbo.json       # Turborepo configuration
+```text
+grabbr/
+├── build/                 # App icons and macOS entitlements
+├── scripts/               # Local setup utilities
+├── src/
+│   ├── main/              # Electron main process, IPC, updater, yt-dlp services
+│   ├── preload/           # Safe renderer bridge
+│   └── renderer/          # React UI
+├── electron-builder.yml   # Packaging config
+├── electron.vite.config.ts
+└── package.json
 ```
+
+`resources/bin/` is created locally by the binary download script and contains the platform-specific `yt-dlp`, `ffmpeg`, and `ffprobe` executables used by the app.
+
+## Prerequisites
+
+- [Bun](https://bun.sh/)
+- Windows, macOS, or Linux
 
 ## Getting Started
 
-### Prerequisites
-
-- [Bun](https://bun.sh/) (v1.2.21 or higher)
-- Node.js (v18 or higher)
-
-### Installation
-
-Install all dependencies:
+### Install dependencies
 
 ```bash
 bun install
 ```
 
-### Development
-
-Start all applications in development mode:
+### Download required binaries
 
 ```bash
-bun dev
+bun run down
 ```
 
-Start specific applications:
+This downloads platform-specific copies of `yt-dlp`, `ffmpeg`, and `ffprobe` into `resources/bin`.
+
+### Start development
 
 ```bash
-bun dev:web        # Start only the web application
-bun dev:desktop    # Start only the desktop application
+bun run dev
 ```
 
-### Building
-
-Build all applications:
+### Preview the built app
 
 ```bash
-bun build
+bun run start
 ```
 
-Build specific applications:
+## Build
+
+### Typecheck and bundle
 
 ```bash
-bun build:web      # Build web application
-bun build:desktop  # Build desktop application
+bun run build
 ```
+
+### Package for a platform
+
+```bash
+bun run build:win
+bun run build:mac
+bun run build:linux
+```
+
+### Create an unpacked build
+
+```bash
+bun run build:unpack
+```
+
+Packaged output is written to `dist/`.
 
 ## Available Scripts
 
-- `bun dev` - Start all applications in development mode
-- `bun build` - Build all applications
-- `bun dev:web` - Start only the web application
-- `bun dev:desktop` - Start only the desktop application
-- `bun check-types` - Check TypeScript types across all apps
-- `bun cleanall` - Clean all build artifacts and node_modules
-- `bun publish` - Build and publish desktop application
-- `bun down` - Download required binaries for desktop app
+- `bun run dev` starts Electron and the renderer in development mode
+- `bun run start` previews the current built app
+- `bun run build` typechecks and builds the app
+- `bun run build:win` creates a Windows package
+- `bun run build:mac` creates a macOS package
+- `bun run build:linux` creates Linux packages
+- `bun run build:unpack` creates an unpacked desktop build
+- `bun run typecheck` runs both Node and renderer TypeScript checks
+- `bun run lint` runs `oxlint`
+- `bun run format` formats the repo with `oxfmt`
+- `bun run down` downloads required media binaries
+- `bun run clean` removes dependencies and build artifacts
 
-## Technology Stack
+## Download Options
 
-- **Frontend**: Next.js 15, React 19, TypeScript
-- **Styling**: TailwindCSS 4, shadcn/ui components, Radix UI
-- **Desktop**: Electron 37, esbuild, electron-builder
-- **State Management**: React Context, Electron Store
-- **Notifications**: Sonner toast notifications
-- **Icons**: Lucide React
-- **UI Components**: Card, Tabs, RadioToggleGroup, ToggleGroup
-- **Build System**: Turborepo, Bun
-- **Package Manager**: Bun 1.2.21
-- **Media Processing**: yt-dlp, FFmpeg (bundled)
-- **Updates**: electron-updater
+### Audio
+
+- `Best` preset for fast highest-quality audio downloads
+- `Custom` preset with selectable format and quality controls
+- Optional metadata and chapter embedding
+
+### Video
+
+- `Best` preset for fast highest-quality MP4 downloads
+- `Custom` preset with selectable resolution and container
+- Optional metadata and chapter embedding
+
+### General
+
+- System, light, and dark themes
+- Ask every time or reuse a selected download folder
+
+### Updates
+
+- Show installed `yt-dlp` version
+- Update `yt-dlp` directly from the app
+- Receive packaged app updates when running production builds
+
+### Experimental
+
+- Select a `cookies.txt` file for cases where rate limits block downloads
+- Treat this feature carefully because the file may contain sensitive account data
+
+## Releases
+
+GitHub Actions builds draft releases for Windows, macOS, and Linux from version tags matching `v*.*.*`.

@@ -1,0 +1,4 @@
+provider: github
+owner: dhruv-jangid
+repo: grabbr
+token: ${env.GITHUB_TOKEN}

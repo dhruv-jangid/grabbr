@@ -1,0 +1,60 @@
+appId: com.grabbr.app
+
+productName: Grabbr
+
+directories:
+  buildResources: build
+
+files:
+  - "!**/.vscode/*"
+  - "!src/*"
+  - "!electron.vite.config.{js,ts,mjs,cjs}"
+  - "!{global.d.ts,oxfmt.config.ts,oxlint.config.ts,dev-app-update.yml,CHANGELOG.md,README.md}"
+  - "!{.env,.env.*,bun.lock}"
+  - "!{tsconfig.json,tsconfig.node.json,tsconfig.web.json}"
+
+asarUnpack:
+  - resources/**
+
+# electronFuses:
+#   EnableEmbeddedAsarIntegrityValidation: true
+#   OnlyLoadAppFromAsar: true
+
+win:
+  target:
+    - nsis
+  executableName: grabbr
+
+nsis:
+  artifactName: ${productName}-${version}-${os}-${arch}-setup.${ext}
+  shortcutName: ${productName}
+  uninstallDisplayName: ${productName}
+  createDesktopShortcut: always
+
+mac:
+  target:
+    - dmg
+    - zip
+  entitlementsInherit: build/entitlements.mac.plist
+  extendInfo:
+    - NSDownloadsFolderUsageDescription: Application requests access to the user's Downloads folder.
+  notarize: false
+
+dmg:
+  artifactName: ${productName}-${version}-${os}-${arch}.${ext}
+
+linux:
+  target:
+    - AppImage
+    # - snap
+    - deb
+  maintainer: dhruvjangid
+  category: Utility
+
+appImage:
+  artifactName: ${productName}-${version}-${os}-${arch}.${ext}
+
+deb:
+  artifactName: ${productName}-${version}-${os}-${arch}.${ext}
+
+npmRebuild: false
